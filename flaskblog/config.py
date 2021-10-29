@@ -1,4 +1,6 @@
 import os
+import tempfile
+
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv(), override=True)
 
@@ -11,3 +13,17 @@ class Config:
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.getenv('EMAIL_USER')
     MAIL_PASSWORD = os.getenv('EMAIL_PASS')
+
+
+db_fd, db_path = tempfile.mkstemp()
+class TestConfig:
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    # SQLALCHEMY_DATABASE_URI = db_path
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
+    MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.getenv('EMAIL_USER')
+    MAIL_PASSWORD = os.getenv('EMAIL_PASS')
+    TESTING = True,
+    DATABASE = db_path
